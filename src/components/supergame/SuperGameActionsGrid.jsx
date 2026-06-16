@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useChestStore from "@/stores/useChestStore";
 import {clsx} from "clsx";
 import EnergyDisplay from "@/components/home/EnergyDisplay.jsx";
+import {useWindowSize} from "@/hooks/useWindowSize.ts";
 
 export default function SuperGameActionsGrid({energy = ''}) {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export default function SuperGameActionsGrid({energy = ''}) {
   const limit = useChestStore((state) => state.getLimit("superGame"));
   const isCompleted = progress >= limit;
   const chestPercent = (progress / limit) * 100;
+  const [width, height] = useWindowSize();
 
   // Автоматический переход при достижении лимита
   useEffect(() => {
@@ -69,7 +71,14 @@ export default function SuperGameActionsGrid({energy = ''}) {
         <div className="w-full flex justify-center min-w-[18rem]">
           {/* мобильная и десктопная верстка без изменений */}
           <div className="w-full sm:hidden">
-            <div className="w-full grid grid-cols-3 gap-3 max-w-88.5 mx-auto">
+            <div
+                className={clsx(
+                    "w-full grid grid-cols-3  max-w-88.5 mx-auto",
+                    !isMobile && ["gap-3"],
+                    (isMobile && height >= 740) && ["gap-3"],
+                    (isMobile && height < 740) && ["gap-2"],
+                )}
+            >
               <TreasureChest
                   onClick={handleChestClick}
                   progress={chestPercent}
@@ -93,7 +102,12 @@ export default function SuperGameActionsGrid({energy = ''}) {
                   to="/shop"
                   icon="shop"
                   label="Магазин"
-                  className="max-w-[6.875rem] aspect-[110/88]"
+                  className={clsx(
+                      "max-w-[6.875rem]",
+                      !isMobile && ["aspect-[110/88]"],
+                      (isMobile && height >= 740) && ["aspect-[110/88]"],
+                      (isMobile && height < 740) && ["aspect-[110/69]"],
+                  )}
               />
               <ActionCard
                   onClick={() => {
@@ -102,7 +116,12 @@ export default function SuperGameActionsGrid({energy = ''}) {
                   }}
                   icon="info"
                   label="Правила"
-                  className="border-white text-white max-w-[6.875rem] aspect-[110/88]"
+                  className={clsx(
+                      "border-white text-white max-w-[6.875rem] ",
+                      !isMobile && ["aspect-[110/88]"],
+                      (isMobile && height >= 740) && ["aspect-[110/88]"],
+                      (isMobile && height < 740) && ["aspect-[110/69]"],
+                  )}
               />
               <ActionCard
                   onClick={() => {
@@ -111,7 +130,12 @@ export default function SuperGameActionsGrid({energy = ''}) {
                   }}
                   icon="trophy"
                   label="Мои призы"
-                  className="max-w-[6.875rem] aspect-[110/88]"
+                  className={clsx(
+                      "max-w-[6.875rem] ",
+                      !isMobile && ["aspect-[110/88]"],
+                      (isMobile && height >= 740) && ["aspect-[110/88]"],
+                      (isMobile && height < 740) && ["aspect-[110/69]"],
+                  )}
               />
             </div>
           </div>

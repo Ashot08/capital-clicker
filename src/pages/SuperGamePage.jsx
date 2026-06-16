@@ -33,7 +33,7 @@ import {useWindowSize} from "@/hooks/useWindowSize.ts";
 
 export default function SuperGamePage() {
   const navigate = useNavigate();
-    const [width, height] = useWindowSize();
+  const [width, height] = useWindowSize();
   const { openModal, closeModal } = useModalStore();
   const { flyFromClick } = useFlyingPlus();
   const { flyFromClick: flyCoin } = useFlyingCoin();
@@ -276,7 +276,12 @@ export default function SuperGamePage() {
           className={clsx(
               !isMobile && [""],
               (isMobile && height >= 740) && ["home-header", "mb-2"],
-              (isMobile && height < 740) && ["home-header", "mb-2"],
+              (isMobile && height < 740) && ["home-header", "mb-2",],
+          )}
+          glassMessageClassName={clsx(
+              !isMobile && [""],
+              (isMobile && height >= 740) && [""],
+              (isMobile && height < 740) && ["h-7",],
           )}
       />
       <SuperPrizeBanner
@@ -292,10 +297,10 @@ export default function SuperGamePage() {
 
       <GameModeToggle
           className={clsx(
-              "",
-              !isMobile && ["w-full max-w-[46.625rem] mx-auto mt-1.5 sm:mt-3"],
-              (isMobile && height >= 740) && ["h-80/1000"],
-              (isMobile && height < 740) && ["h-80/1000"],
+              "w-full",
+              !isMobile && ["max-w-[46.625rem] mx-auto mt-1.5 sm:mt-3"],
+              (isMobile && height >= 740) && ["h-80/1000 mt-1"],
+              (isMobile && height < 740) && ["h-80/1000 mt-1"],
           )}
       />
 
@@ -312,13 +317,32 @@ export default function SuperGamePage() {
           className={`${animatingCounter ? "counter-animate" : ""} ${superGameMode === SUPER_GAME_MODES.BATTERY ? "mr-auto sm:mr-0" : "mx-auto sm:mx-0"} sm:justify-self-center`}
           ref={counterRef}
         >
-          <ClickCounter clicks={displayValue} />
+          <ClickCounter
+              clicks={displayValue}
+              textClassName={clsx(
+                  "",
+                  !isMobile && [""],
+                  (isMobile && height >= 740) && [""],
+                  (isMobile && height < 740) && ["text-[1rem]"],
+              )}
+              imageClassName={clsx(
+                  "",
+                  !isMobile && [""],
+                  (isMobile && height >= 740) && [""],
+                  (isMobile && height < 740) && ["max-w-6 max-h-6"],
+              )}
+          />
         </div>
         <div className="justify-self-end">
           {superGameMode === SUPER_GAME_MODES.BATTERY && (
             <Button
               onClick={handleSendClicks}
-              className="sm:min-w-[8.75rem] rounded-[1rem] px-5 h-10 sm:h-[3.25rem] text-white bg-golden hover:bg-golden/80 active:scale-95"
+              className={clsx(
+                  "sm:min-w-[8.75rem] rounded-[1rem] px-5  sm:h-[3.25rem] text-white bg-golden hover:bg-golden/80 active:scale-95",
+                  !isMobile && ["h-10"],
+                  (isMobile && height >= 740) && ["h-10"],
+                  (isMobile && height < 740) && ["h-6"],
+              )}
             >
               <span>Отправить</span>
             </Button>
@@ -331,7 +355,7 @@ export default function SuperGamePage() {
               "",
               !isMobile && ["flex justify-center items-center mb-6 sm:mb-4 lg:mb-0"],
               (isMobile && height >= 740) && ["flex items-center justify-center h-325/1000"],
-              (isMobile && height < 740) && ["flex items-center justify-center h-325/1000"],
+              (isMobile && height < 740) && ["flex items-center justify-center h-300/1000"],
           )}
       >
         <SuperClickBear onClick={handleClickBear} spinSpeed={globalSpinSpeed} />
@@ -340,9 +364,9 @@ export default function SuperGamePage() {
       <div
           className={clsx(
               "",
-              !isMobile && ["-translate-y-1/2 sm:translate-y-0 min-w-[18rem] mt-auto pb-4 flex sm:justify-center"],
-              (isMobile && height >= 740) && ["h-295/1000"],
-              (isMobile && height < 740) && ["h-295/1000"],
+              !isMobile && ["-translate-y-1/2 sm:translate-y-0 min-w-[18rem] mt-auto pb-4 "],
+              (isMobile && height >= 740) && ["h-295/1000 -mt-2 flex items-end justify-center"],
+              (isMobile && height < 740) && ["h-265/1000 -mt-2 flex items-end justify-center"],
           )}
       >
         <SuperGameActionsGrid energy={energy} />
