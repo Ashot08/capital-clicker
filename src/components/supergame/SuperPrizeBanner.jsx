@@ -1,9 +1,13 @@
 // src/components/prize/SuperPrizeBanner.jsx
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import {clsx} from "clsx";
+import {isMobile} from "react-device-detect";
+import {useWindowSize} from "@/hooks/useWindowSize.ts";
 
 export default function SuperPrizeBanner({ prize, className = "" }) {
   const navigate = useNavigate();
+  const [width, height] = useWindowSize();
 
   return (
     <div
@@ -31,11 +35,32 @@ export default function SuperPrizeBanner({ prize, className = "" }) {
       </div>
 
       {/* Заголовок + описание */}
-      <div className="relative z-10 inline-flex flex-col text-white">
-        <span className="font-extrabold text-[0.75rem] text-white/50 uppercase leading-[1.4]">
+      <div
+          className={clsx(
+              "relative z-10 inline-flex text-white",
+              !isMobile && ["flex-col"],
+              (isMobile && height >= 621) && ["flex-col"],
+              (isMobile && height < 620) && ["flex-row", "items-center"],
+          )}
+      >
+        <span
+            className={clsx(
+                "font-extrabold text-[0.75rem] text-white/50 uppercase leading-[1.4]",
+                !isMobile && [""],
+                (isMobile && height >= 621) && [""],
+                (isMobile && height < 620) && ["mr-3", "leading-[1]"],
+            )}
+        >
           Главный приз
         </span>
-        <span className="text-[1rem] font-bold text-white/90 leading-[1.4]">
+        <span
+            className={clsx(
+                "text-[1rem] font-bold text-white/90 ",
+                !isMobile && ["leading-[1.4]"],
+                (isMobile && height >= 621) && ["leading-[1.4]"],
+                (isMobile && height < 620) && ["leading-[1]"],
+            )}
+        >
           {prize?.title}
         </span>
       </div>

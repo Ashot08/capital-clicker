@@ -1,6 +1,8 @@
 // src/components/supergame/SuperClickBear.jsx
 import { cn } from "@/lib/utils";
 import { useEffect, useRef } from "react";
+import {isMobile} from "react-device-detect";
+import {clsx} from "clsx";
 
 export default function SuperClickBear({ onClick, spinSpeed = 0.3 }) {
   const imgRef = useRef(null);
@@ -35,12 +37,23 @@ export default function SuperClickBear({ onClick, spinSpeed = 0.3 }) {
     <div
       className={cn(
         "relative w-full",
-        "min-w-[13rem] max-w-[58vw]",    
+        "min-w-[13rem] max-w-[58vw]",
         "iphone:max-w-[62vw]",
         "sm:max-w-[45vh]",
         "lg:max-w-[36vh]",
         "xl:max-w-[29.5vh]",
         "2xl:max-w-[26vh]",
+          !isMobile && [
+          ],
+          isMobile && [
+            "h-100/100",
+            "min-w-0",
+            "min-h-0",
+            "w-full",
+            "flex",
+            "justify-center",
+            "items-center"
+          ],
       )}
       onClick={onClick}
     >
@@ -51,7 +64,11 @@ export default function SuperClickBear({ onClick, spinSpeed = 0.3 }) {
           onContextMenu={(e) => e.preventDefault()}
           src="/images/webp/circle.webp"
           alt=""
-          className="w-full h-full object-contain"
+          className={clsx(
+                  "w-full h-full object-contain",
+                  isMobile && ["w-auto",],
+                  !isMobile && ["w-full"],
+              )}
         />
       </div>
       {/* Медведь */}
@@ -59,7 +76,11 @@ export default function SuperClickBear({ onClick, spinSpeed = 0.3 }) {
         src="/images/webp/level-bears/level-super.webp"
         onContextMenu={(e) => e.preventDefault()}
         alt=""
-        className="w-full h-full object-cover cursor-pointer transition-transform active:scale-95"
+        className={clsx(
+            "relative h-full object-cover cursor-pointer transition-transform active:scale-95",
+            isMobile && ["w-auto",],
+            !isMobile && ["w-full"],
+        )}
         draggable="false"
       />
     </div>

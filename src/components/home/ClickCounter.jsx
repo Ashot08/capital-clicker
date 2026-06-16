@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import {clsx} from "clsx";
 import {isMobile} from "react-device-detect";
 
-export default function ClickCounter({ clicks, className, icon = "/images/webp/icons-png/click-finger.webp" }) {
+export default function ClickCounter({ clicks, className, icon = "/images/webp/icons-png/click-finger.webp", textClassName = "", imageClassName = "" }) {
   return (
     <div
       className={cn(
@@ -17,9 +17,9 @@ export default function ClickCounter({ clicks, className, icon = "/images/webp/i
       <img
         src={icon}
         alt="Клик"
-        className={clsx(isMobile && "mr-2", "w-8 h-8 sm:w-10 sm:h-10 object-contain")}
+        className={clsx(isMobile && "mr-2", "w-8 h-8 sm:w-10 sm:h-10 object-contain", imageClassName)}
       />
-      <span className="text-[1.875rem] sm:text-[2.5rem] font-bold">
+      <span className={clsx("text-[1.875rem] sm:text-[2.5rem] font-bold", textClassName)}>
         {clicks.toLocaleString()}
       </span>
     </div>

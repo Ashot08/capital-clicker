@@ -12,11 +12,10 @@ import { withTooltip } from "@/components/ui/tooltip";
 // импортируем переменные рекламы и приманки пока из файла
 import { lastWinner } from "@/constants/honeyPot.site.js";
 import {cn} from "@/lib/utils.js";
-import {isMobile} from "react-device-detect";
+import {clsx} from "clsx";
 
-export default function Header({ userBalance = 0, className = "" }) {
+export default function Header({ userBalance = 0, className = "", glassMessageClassName = "" }) {
   const displayBalance = userBalance ?? 0;
-
   const handleReset = () => {
     if (confirm("Вы уверены? Весь прогресс будет потерян!")) {
       resetAllProgress();
@@ -57,9 +56,12 @@ export default function Header({ userBalance = 0, className = "" }) {
 
         {withTooltip(
           <GlassButton
-            className="text-white"
             onClick={() => rulesService.openRulesModal("/data/rules.json")}
             icon="info"
+
+            className={clsx(
+                "text-white"
+            )}
           />,
           "Правила игры",
         )}
@@ -114,7 +116,12 @@ export default function Header({ userBalance = 0, className = "" }) {
       </div>
 
       {/* Второй ряд – сообщение о выигрыше */}
-      <GlassMessage className="font-bold text-white text-center">
+      <GlassMessage
+          className={clsx(
+              "font-bold text-white text-center",
+              glassMessageClassName,
+          )}
+      >
         <span>
           <span className="text-golden">{lastWinner.name}</span> выиграл{" "}
           {lastWinner.win} <span>рублей</span>

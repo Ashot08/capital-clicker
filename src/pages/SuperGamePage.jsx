@@ -2,8 +2,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
-import { useWindowSize } from "react-use";
-
 import Header from "@/components/basic/Header";
 import ClickCounter from "@/components/home/ClickCounter";
 import EnergyDisplay from "@/components/home/EnergyDisplay";
@@ -29,10 +27,13 @@ import useSuperBearStore, {
 import useSuperPrizeStore from "@/stores/useSuperPrizeStore";
 import useBalanceStore from "@/stores/useBalanceStore";
 import { adBanner } from "@/constants/honeyPot.site.js";
+import {clsx} from "clsx";
+import {isMobile} from "react-device-detect";
+import {useWindowSize} from "@/hooks/useWindowSize.ts";
 
 export default function SuperGamePage() {
   const navigate = useNavigate();
-  const { width, height } = useWindowSize();
+  const [width, height] = useWindowSize();
   const { openModal, closeModal } = useModalStore();
   const { flyFromClick } = useFlyingPlus();
   const { flyFromClick: flyCoin } = useFlyingCoin();
@@ -65,7 +66,7 @@ export default function SuperGamePage() {
   const counterRef = useRef(null);
 
   const { toastMessage, toastVisible, toastLeaving, showToast } = useToast();
-  
+
   const { countUpValue, isCountUpActive, startCountUp } = useCountUp();
   const { setSpinSpeed: setLocalSpinSpeed, applySpinDecay } = useSpinSpeed(
     0.1,
@@ -240,7 +241,10 @@ export default function SuperGamePage() {
   }
 
   return (
-    <div className="relative min-h-screen min-h-[100dvh] flex flex-col pt-2 sm:pt-4 lg:pt-7.5 pb-4 sm:pb-29 lg:pb-38">
+      <div className={clsx(
+          !isMobile && ["relative min-h-screen min-h-[100dvh] flex flex-col pt-2 sm:pt-4 lg:pt-7.5 pb-4 sm:pb-29 lg:pb-38"],
+          isMobile && ["mobile-screen", "flex", "flex-col", "justify-between", "pb-19"])
+      }>
       {toastVisible && (
         <div
           className={`fixed top-4 right-4 z-50 bg-golden text-white px-4 py-3 rounded-md shadow-lg ${toastLeaving ? "animate-slide-out-right" : "animate-slide-in-right"}`}
@@ -262,28 +266,89 @@ export default function SuperGamePage() {
         </div>
       )}
 
-      <AdBanner {...adBanner} className="mb-2 sm:mb-4 lg:mb-5" />
-      <Header userBalance={balance} />
+      <AdBanner {...adBanner} className={clsx(
+          !isMobile && ["mb-2", "sm:mb-4", "lg:mb-5"],
+          (isMobile && height >= 740) && ["h-80/1000", "mb-1"],
+          (isMobile && height < 740) && ["h-80/1000", "mb-1"], "advert"
+      )} />
+      <Header
+          userBalance={balance}
+          className={clsx(
+              !isMobile && [""],
+              (isMobile && height >= 740) && ["home-header", "mb-2"],
+              (isMobile && height < 740) && ["home-header", "mb-2",],
+          )}
+          glassMessageClassName={clsx(
+              !isMobile && [""],
+              (isMobile && height >= 740) && [""],
+              (isMobile && height < 740) && ["h-7",],
+          )}
+      />
       <SuperPrizeBanner
         prize={selectedPrize}
         progress={prizeProgress}
-        className="max-w-[46.625rem] mx-auto mt-2 sm:mt-4"
+        className={clsx(
+            "",
+            !isMobile && ["max-w-[46.625rem] mx-auto mt-2 sm:mt-4"],
+            (isMobile && height >= 740) && ["h-80/1000"],
+            (isMobile && height < 740) && ["h-80/1000"],
+        )}
       />
-      <GameModeToggle className="w-full max-w-[46.625rem] mx-auto mt-1.5 sm:mt-3" />
 
-      <div className="h-10 sm:h-[3.25rem] flex sm:grid sm:grid-cols-3 items-center mt-3 w-full max-w-[46.625rem] mx-auto">
+      <GameModeToggle
+          className={clsx(
+              "w-full",
+              !isMobile && ["max-w-[46.625rem] mx-auto mt-1.5 sm:mt-3"],
+              (isMobile && height >= 740) && ["h-80/1000 mt-1"],
+              (isMobile && height < 740) && ["h-80/1000 mt-1"],
+          )}
+      />
+
+      <div
+          className={clsx(
+              "",
+              !isMobile && ["h-10 sm:h-[3.25rem] flex sm:grid sm:grid-cols-3 items-center mt-3 w-full max-w-[46.625rem] mx-auto"],
+              (isMobile && height >= 740) && ["h-80/1000 flex items-center w-full mt-1"],
+              (isMobile && height < 740) && ["h-80/1000 flex items-center w-full mt-1"],
+          )}
+      >
         <div className="hidden sm:block" />
         <div
           className={`${animatingCounter ? "counter-animate" : ""} ${superGameMode === SUPER_GAME_MODES.BATTERY ? "mr-auto sm:mr-0" : "mx-auto sm:mx-0"} sm:justify-self-center`}
           ref={counterRef}
         >
-          <ClickCounter clicks={displayValue} />
+          <ClickCounter
+              clicks={displayValue}
+              textClassName={clsx(
+                  "",
+                  !isMobile && [""],
+                  (isMobile && height >= 740) && [""],
+                  (isMobile && height < 740) && ["text-[1rem]"],
+              )}
+              imageClassName={clsx(
+                  "",
+                  !isMobile && [""],
+                  (isMobile && height >= 740) && [""],
+                  (isMobile && height < 740) && ["max-w-6 max-h-6"],
+              )}
+              className={clsx(
+                  "",
+                  !isMobile && [""],
+                  (isMobile && height >= 740) && [""],
+                  (isMobile && height < 740) && ["flex items-center"],
+              )}
+          />
         </div>
         <div className="justify-self-end">
           {superGameMode === SUPER_GAME_MODES.BATTERY && (
             <Button
               onClick={handleSendClicks}
-              className="sm:min-w-[8.75rem] rounded-[1rem] px-5 h-10 sm:h-[3.25rem] text-white bg-golden hover:bg-golden/80 active:scale-95"
+              className={clsx(
+                  "sm:min-w-[8.75rem] rounded-[1rem] px-5  sm:h-[3.25rem] text-white bg-golden hover:bg-golden/80 active:scale-95",
+                  !isMobile && ["h-10"],
+                  (isMobile && height >= 740) && ["h-10"],
+                  (isMobile && height < 740) && ["h-8"],
+              )}
             >
               <span>Отправить</span>
             </Button>
@@ -291,16 +356,26 @@ export default function SuperGamePage() {
         </div>
       </div>
 
-      <div className="flex justify-center flex-1 items-center mb-6 sm:mb-4 lg:mb-0">
+      <div
+          className={clsx(
+              "",
+              !isMobile && ["flex justify-center items-center mb-6 sm:mb-4 lg:mb-0"],
+              (isMobile && height >= 740) && ["flex items-center justify-center h-325/1000"],
+              (isMobile && height < 740) && ["flex items-center justify-center h-300/1000"],
+          )}
+      >
         <SuperClickBear onClick={handleClickBear} spinSpeed={globalSpinSpeed} />
       </div>
 
-      <div className="flex justify-center mb-8 sm:mb-4">
-        <EnergyDisplay energy={energy} />
-      </div>
-
-      <div className="-translate-y-1/2 sm:translate-y-0 min-w-[18rem] mt-auto pb-4 flex sm:justify-center">
-        <SuperGameActionsGrid />
+      <div
+          className={clsx(
+              "",
+              !isMobile && ["-translate-y-1/2 sm:translate-y-0 min-w-[18rem] mt-auto pb-4 "],
+              (isMobile && height >= 740) && ["h-295/1000 -mt-2 flex items-end justify-center"],
+              (isMobile && height < 740) && ["h-265/1000 -mt-2 flex items-end justify-center"],
+          )}
+      >
+        <SuperGameActionsGrid energy={energy} />
       </div>
     </div>
   );
