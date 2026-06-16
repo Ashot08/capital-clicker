@@ -331,6 +331,12 @@ export default function SuperGamePage() {
                   (isMobile && height >= 740) && [""],
                   (isMobile && height < 740) && ["max-w-6 max-h-6"],
               )}
+              className={clsx(
+                  "",
+                  !isMobile && [""],
+                  (isMobile && height >= 740) && [""],
+                  (isMobile && height < 740) && ["flex items-center"],
+              )}
           />
         </div>
         <div className="justify-self-end">
@@ -341,7 +347,7 @@ export default function SuperGamePage() {
                   "sm:min-w-[8.75rem] rounded-[1rem] px-5  sm:h-[3.25rem] text-white bg-golden hover:bg-golden/80 active:scale-95",
                   !isMobile && ["h-10"],
                   (isMobile && height >= 740) && ["h-10"],
-                  (isMobile && height < 740) && ["h-6"],
+                  (isMobile && height < 740) && ["h-8"],
               )}
             >
               <span>Отправить</span>
