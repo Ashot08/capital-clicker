@@ -23,7 +23,7 @@ export default function Layout() {
   const isFixed = true;
 
   return (
-    <OrientationGuard className={`${isSplash ? "" : "bg-black"}`}>
+    <OrientationGuard className={`${isSplash ? "" : "bg-black"} overflow-x-hidden`}>
       <div className="eco-container">
         <div className="min-h-screen flex flex-col relative">
           <main className="flex-1">

@@ -36,7 +36,7 @@ export default function ClickBear({ onClick, percent = 0, prize, onClaim }) {
   return (
       <div
           className={clsx("relative cursor-pointer transition-transform active:scale-95 inline-block",
-              isMobile && ["h-100/100", "min-w-0", "min-h-0", "w-full"],
+              isMobile && ["h-100/100", "min-w-0", "min-h-0", "w-full", "max-w-[72vw]"],
           )}
           onClick={onClick}
       >

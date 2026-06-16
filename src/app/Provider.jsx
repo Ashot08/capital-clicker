@@ -5,11 +5,12 @@ import { AppRouter } from "@/app/Router";
 import { initAutoRem } from "@/lib/auto-rem";
 import Modal from "@/components/basic/Modal";
 import useModalStore from "@/stores/useModalStore";
-import { preloadSound, unlockAudio } from "@/audio/manager"; // Импортируем функцию предзагрузки
+import { preloadSound, unlockAudio } from "@/audio/manager";
+import {useViewportHeight} from "@/hooks/useViewportHeight.js"; // Импортируем функцию предзагрузки
 
 export function AppProvider() {
   const { classes } = useModalStore();
-
+  useViewportHeight();
   useEffect(() => {
     const cleanupAutoRem = initAutoRem(1980, 16);
     // const cleanupViewport = initViewport(1536, 1980);
